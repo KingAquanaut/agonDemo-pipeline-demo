@@ -1,4 +1,4 @@
-name: Example CI (Demo)
+name: Demo Deploy Pipeline
 
 on:
   push:
@@ -6,20 +6,67 @@ on:
   workflow_dispatch:
 
 jobs:
-  api-demo:
+  initial:
+    name: 1) Initial
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - name: API demo step
+      - name: Repo snapshot
         run: |
-          echo "Pretend Laravel checks here"
-          if [ -d "api" ]; then ls -la api; else echo "No api folder"; fi
+          echo "Branch: $GITHUB_REF_NAME"
+          ls -la
 
-  web-demo:
+  build:
+    name: 2) Build
     runs-on: ubuntu-latest
+    needs: initial
     steps:
       - uses: actions/checkout@v4
-      - name: Web demo step
+      - name: Build placeholder
         run: |
-          echo "Pretend Node checks here"
-          if [ -d "web" ]; then ls -la web; else echo "No web folder"; fi
+          echo "Build step (api/web) would run here"
+          echo "✅ Build complete"
+
+  test:
+    name: 3) Test
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Test placeholder
+        run: |
+          echo "Unit/integration tests would run here"
+          echo "✅ Tests passed"
+
+  sanity:
+    name: 4) Sanity Check
+    runs-on: ubuntu-latest
+    needs: test
+    steps:
+      - uses: actions/checkout@v4
+      - name: Sanity placeholder
+        run: |
+          echo "Smoke checks / quick validation would run here"
+          echo "✅ Sanity checks passed"
+
+  deploy_beta:
+    name: 5) Deploy (Beta)
+    runs-on: ubuntu-latest
+    needs: sanity
+    environment: beta
+    steps:
+      - name: Deploy beta placeholder
+        run: |
+          echo "Deploy to BETA would run here"
+          echo "✅ Beta deploy complete"
+
+  deploy_prod:
+    name: 6) Deploy (Main/Prod)
+    runs-on: ubuntu-latest
+    needs: deploy_beta
+    environment: production
+    steps:
+      - name: Deploy prod placeholder
+        run: |
+          echo "Deploy to PROD would run here"
+          echo "✅ Production deploy complete"
