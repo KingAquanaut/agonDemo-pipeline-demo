@@ -1,0 +1,25 @@
+name: Example CI (Demo)
+
+on:
+  push:
+    branches: [ "demo/pipeline" ]
+  workflow_dispatch:
+
+jobs:
+  api-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: API demo step
+        run: |
+          echo "Pretend Laravel checks here"
+          if [ -d "api" ]; then ls -la api; else echo "No api folder"; fi
+
+  web-demo:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Web demo step
+        run: |
+          echo "Pretend Node checks here"
+          if [ -d "web" ]; then ls -la web; else echo "No web folder"; fi
